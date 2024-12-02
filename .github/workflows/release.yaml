@@ -48,20 +48,16 @@ jobs:
             update-build-number=false
             next-version=${{ env.VERSION }}
 
-      - name: Setup GitRelease
-        steps:
-          - name: Install GitReleaseManager
-            uses: gittools/actions/gitreleasemanager/setup@v3.0.3
-            with:
-              versionSpec: '0.18.x'
+      - name: Install GitReleaseManager
+        uses: gittools/actions/gitreleasemanager/setup@v3.0.3
+        with:
+          versionSpec: '0.18.x'
 
-      - name: Create Release
-        steps:
-        - uses: gittools/actions/gitreleasemanager/create@v3.0.3
-          name: Create release with GitReleaseManager
-          with:
-            token: ${{ secrets.GITHUB_TOKEN }}
-            owner: 'jenciso'
-            repository: ${{ github.repository }}
-            milestone: ${{ env.VERSION }}
-            name: v${{ env.VERSION }}
+      - uses: gittools/actions/gitreleasemanager/create@v3.0.3
+        name: Create release with GitReleaseManager
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          owner: 'jenciso'
+          repository: ${{ github.repository }}
+          milestone: ${{ env.VERSION }}
+          name: v${{ env.VERSION }}
