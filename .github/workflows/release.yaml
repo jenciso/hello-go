@@ -8,10 +8,6 @@ on:
       - 'v*.*.*'
   workflow_dispatch:
 
-env:
-  REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
-
 jobs:
 
   build:
@@ -20,22 +16,11 @@ jobs:
     permissions:
       contents: write
       packages: write
-      attestations: write
       id-token: write
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
-
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v3.0.3
-        with:
-          versionSpec: '6.x'
-
-      - name: Zip Release
-        run: zip -x '*.git*' -r release.zip . 
 
       - name: Get VERSION from File
         id: version_file
@@ -43,25 +28,16 @@ jobs:
           VERSION="$(cat ./VERSION)"
           echo "VERSION=$VERSION" >> $GITHUB_ENV
 
-      - name: Determine Version
-        id: version_step
-        uses: gittools/actions/gitversion/execute@v3.0.3
-        with:
-          overrideConfig: |
-            update-build-number=false
-            next-version=${{ env.VERSION }}
-
       - name: Create Release
         id: create_release
         uses: actions/create-release@v1
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         with:
           tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }} - v${{ env.fullSemVer }}
+          release_name: Release ${{ github.ref }}
           body: |
             Changes in this Release
-            - First Change
-            - Second Change
+            - Add new version: v${{ env.VERSION }}
           draft: false
           prerelease: false
