@@ -1,0 +1,67 @@
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*.*.*'
+  workflow_dispatch:
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+
+    permissions:
+      contents: read
+      packages: write
+      attestations: write
+      id-token: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v3.0.3
+        with:
+          versionSpec: '6.x'
+
+      - name: Get VERSION from File
+        id: version_file
+        run: |
+          VERSION="$(cat ./VERSION)"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Determine Version
+        id: version_step
+        uses: gittools/actions/gitversion/execute@v3.0.3
+        with:
+          overrideConfig: |
+            update-build-number=false
+            next-version=${{ env.VERSION }}
+
+      - name: Setup GitRelease
+        steps:
+          - name: Install GitReleaseManager
+            uses: gittools/actions/gitreleasemanager/setup@v3.0.3
+            with:
+              versionSpec: '0.18.x'
+
+      - name: Create Release
+        steps:
+        - uses: gittools/actions/gitreleasemanager/create@v3.0.3
+          name: Create release with GitReleaseManager
+          with:
+            token: ${{ secrets.GITHUB_TOKEN }}
+            owner: 'jenciso'
+            repository: ${{ github.repository }}
+            milestone: ${{ env.VERSION }}
+            name: v${{ env.VERSION }}
