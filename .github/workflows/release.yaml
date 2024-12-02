@@ -34,6 +34,12 @@ jobs:
         with:
           versionSpec: '6.x'
 
+      - name: Fetch all history for all tags and branches
+        run: git fetch --prune --unshallow
+
+      - name: Zip Release
+        run: zip -x '*.git*' -r release.zip . 
+
       - name: Get VERSION from File
         id: version_file
         run: |
@@ -61,9 +67,19 @@ jobs:
           repository: ${{ github.repository }}
           milestone: ${{ env.VERSION }}
           name: v${{ env.VERSION }}
+          assets: |
+            release.zip
 
       - uses: gittools/actions/gitreleasemanager/publish@v3.0.3
         name: Publish release with GitReleaseManager
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          owner: 'jenciso'
+          repository: ${{ github.repository }}
+          milestone: ${{ env.VERSION }}
+
+      - uses: gittools/actions/gitreleasemanager/close@v3.0.3
+        name: Close release with GitReleaseManager
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           owner: 'jenciso'
