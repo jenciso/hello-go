@@ -31,7 +31,7 @@ jobs:
           TAG: ${{ github.ref_name }}
           VERSION: ${{ env.VERSION }}
         run: |
-          gh release create "$tag" \
+          gh release create "$TAG" \
               --repo="$GITHUB_REPOSITORY" \
               --title="${GITHUB_REPOSITORY#*/} ${TAG#v} - Based on ${VERSION}" \
               --generate-notes
