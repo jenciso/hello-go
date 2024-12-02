@@ -7,7 +7,7 @@ import (
 
 func main() {
 
-	fmt.Println("Hello, Go")
+  fmt.Println("Hello: Version 113, Go")
 	fmt.Println(runtime.GOOS, runtime.GOARCH)
 
 }

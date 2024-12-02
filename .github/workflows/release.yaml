@@ -2,15 +2,11 @@ name: Release
 
 on:
   push:
-    branches:
-      - main
     tags:
       - 'v*.*.*'
-  workflow_dispatch:
 
 jobs:
-
-  build:
+  release:
     runs-on: ubuntu-latest
 
     permissions:

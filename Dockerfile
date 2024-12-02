@@ -1,7 +1,7 @@
-FROM golang:1.23.3-alpine3.20 AS build
+FROM golang:1.23.3-alpine3 AS build
 
 COPY . /app/
-RUN go build -o /app/hello-go /app/main.go
+RUN CGO_ENABLED=0 go build -ldflags="-w -s" -o /app/hello-go /app/main.go
 
 FROM scratch
 ARG USER_UID=10001
