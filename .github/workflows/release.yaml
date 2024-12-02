@@ -28,9 +28,10 @@ jobs:
         id: create_release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          tag: ${{ github.ref_name }}
+          TAG: ${{ github.ref_name }}
+          VERSION: ${{ env.VERSION }}
         run: |
           gh release create "$tag" \
               --repo="$GITHUB_REPOSITORY" \
-              --title="${GITHUB_REPOSITORY#*/} ${tag#v} - with: ${{ env.VERSION }}" \
+              --title="${GITHUB_REPOSITORY#*/} ${TAG#v} - Based on ${VERSION}" \
               --generate-notes
