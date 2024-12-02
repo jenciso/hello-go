@@ -51,34 +51,17 @@ jobs:
             update-build-number=false
             next-version=${{ env.VERSION }}
 
-      - name: Install GitReleaseManager
-        uses: gittools/actions/gitreleasemanager/setup@v3.0.3
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
         with:
-          versionSpec: '0.18.x'
-
-      - uses: gittools/actions/gitreleasemanager/create@v3.0.3
-        name: Create release with GitReleaseManager
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          owner: 'jenciso'
-          repository: ${{ github.repository }}
-          milestone: ${{ env.VERSION }}
-          name: v${{ env.VERSION }}
-          assets: |
-            release.zip
-
-      - uses: gittools/actions/gitreleasemanager/publish@v3.0.3
-        name: Publish release with GitReleaseManager
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          owner: 'jenciso'
-          repository: ${{ github.repository }}
-          milestone: ${{ env.VERSION }}
-
-      - uses: gittools/actions/gitreleasemanager/close@v3.0.3
-        name: Close release with GitReleaseManager
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          owner: 'jenciso'
-          repository: ${{ github.repository }}
-          milestone: ${{ env.VERSION }}
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }} - v${{ env.fullSemVer }}
+          body: |
+            Changes in this Release
+            - First Change
+            - Second Change
+          draft: false
+          prerelease: false
