@@ -61,3 +61,11 @@ jobs:
           repository: ${{ github.repository }}
           milestone: ${{ env.VERSION }}
           name: v${{ env.VERSION }}
+
+      - uses: gittools/actions/gitreleasemanager/publish@v3.0.3
+        name: Publish release with GitReleaseManager
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          owner: 'jenciso'
+          repository: ${{ github.repository }}
+          milestone: ${{ env.VERSION }}
