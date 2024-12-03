@@ -93,6 +93,11 @@ jobs:
       - build
     steps:
       - uses: actions/checkout@v3
+      - name: Set repository name to lowercase
+        run: |
+          echo "IMAGE_NAME=${IMAGE_NAME,,}" >> ${GITHUB_ENV}
+        env:
+          IMAGE_NAME: ${{ github.repository }}
       - name: Log into registry ${{ env.REGISTRY }}
         uses: docker/login-action@343f7c4344506bcbf9b4de18042ae17996df046d # v3.0.0
         with:
