@@ -84,6 +84,7 @@ jobs:
           platforms: ${{ matrix.architecture }}
           context: .
           push: true
+          provenance: false
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}:v${{ env.fullSemVer }}-${{ matrix.architecture }}
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}:${{ github.sha }}-${{ matrix.architecture }}
