@@ -23,11 +23,9 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        platform:
-          - linux/amd64
-          - linux/arm/v6
-          - linux/arm/v7
-          - linux/arm64
+        architecture:
+          - amd64
+          - arm64
 
     permissions:
       contents: read
@@ -68,8 +66,8 @@ jobs:
 
       - name: Prepare
         run: |
-          platform=${{ matrix.platform }}
-          echo "PLATFORM_PAIR=${platform//\//-}" >> $GITHUB_ENV
+          architecture=${{ matrix.architecture }}
+          echo "PLATFORM_PAIR=${architecture//\//-}" >> $GITHUB_ENV
 
       - name: Set up Qemu
         uses: docker/setup-qemu-action@v3
@@ -94,11 +92,11 @@ jobs:
         id: build
         uses: docker/build-push-action@v6
         with:
-          platforms: ${{ matrix.platform }}
+          architectures: ${{ matrix.architecture }}
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME}},push-by-digest=true,name-canonical=true,push=true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}:v${{ env.fullSemVer }}-${{ matrix.platform }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}:v${{ env.fullSemVer }}-${{ matrix.architecture }}
 
       - name: Export digest
         run: |
