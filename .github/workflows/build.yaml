@@ -91,13 +91,12 @@ jobs:
           cache-to: type=gha,mode=max
           push: true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}:v${{ env.fullSemVer }}
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}:latest
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}:v${{ env.fullSemVer }}-${{ matrix.architecture }}
           labels: ${{ steps.meta.outputs.labels }}
 
       - name: Generate artifact attestation
         uses: actions/attest-build-provenance@v1
         with:
-          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}
+          subject-name: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}:v${{ env.fullSemVer }}-${{ matrix.architecture }}
           subject-digest: ${{ steps.build-and-push.outputs.digest }}
           push-to-registry: true
