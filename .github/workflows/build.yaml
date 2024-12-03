@@ -103,6 +103,26 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v3.0.3
+        with:
+          versionSpec: '6.x'
+
+      - name: Get VERSION from File
+        id: version_file
+        run: |
+          VERSION="$(cat ./VERSION)"
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+
+      - name: Determine Version
+        id: version_step
+        uses: gittools/actions/gitversion/execute@v3.0.3
+        with:
+          overrideConfig: |
+            update-build-number=false
+            next-version=${{ env.VERSION }}
+
       - name: Set repository name to lowercase
         run: |
           echo "IMAGE_NAME=${IMAGE_NAME,,}" >> ${GITHUB_ENV}
