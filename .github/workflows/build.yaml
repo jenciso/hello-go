@@ -82,6 +82,8 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           platforms: ${{ matrix.architecture }}
+          context: .
+          push: true
           tags: |
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}:v${{ env.fullSemVer }}-${{ matrix.architecture }}
             ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}:${{ github.sha }}-${{ matrix.architecture }}
