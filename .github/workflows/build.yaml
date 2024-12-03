@@ -96,7 +96,7 @@ jobs:
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME}},push-by-digest=true,name-canonical=true,push=true
           tags: |
-            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}:v${{ env.fullSemVer }}-${{ matrix.architecture }}
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}:v${{ env.fullSemVer }}
 
       - name: Export digest
         run: |
