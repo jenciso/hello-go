@@ -97,6 +97,8 @@ jobs:
           platforms: ${{ matrix.platform }}
           labels: ${{ steps.meta.outputs.labels }}
           outputs: type=image,name=${{ env.REGISTRY }}/${{ env.IMAGE_NAME}},push-by-digest=true,name-canonical=true,push=true
+          tags: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME}}:v${{ env.fullSemVer }}-${{ matrix.platform }}
 
       - name: Export digest
         run: |
